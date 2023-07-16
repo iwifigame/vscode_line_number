@@ -142,6 +142,10 @@ interface FileQuickPickItem extends vscode.QuickPickItem {
 }
 
 function buildFileQuickPickItems(files: Array<string>): FileQuickPickItem[] {
+    let count = files.length
+    const number = 1234;
+    // const width = Math.floor(Math.log10(number));
+
     const items = files.map((path, i) => {
         let showPath = path;
 
@@ -152,7 +156,8 @@ function buildFileQuickPickItems(files: Array<string>): FileQuickPickItem[] {
 
         let item = {
             fileName: path,
-            label: i.toString() + "---" + showPath,
+            // label: i.toString().padStart(width, '0') + ")" + showPath,
+            label: i.toString() + ")" + showPath,
             // description: "--- " + i.toString(),
         } as FileQuickPickItem;
         return item
