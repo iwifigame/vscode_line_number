@@ -53,6 +53,11 @@
     "configuration": {
       "title": "All Opened Files",
       "properties": {
+        "ShowAllOpenedFiles.itemWidth": {
+          "type": "number",
+          "default": 80,
+          "description": "all opened files item width"
+        },
         "InsertLineNumber.formats": {
           "type": "array",
           "default": [
@@ -73,7 +78,7 @@
               "suffix": "]    "
             }
           ],
-          "description": "all opened files"
+          "description": "insert line number"
         }
       }
     },

@@ -80,3 +80,9 @@ export namespace InsertLineNumberConfig {
         suffix?: string;
     }
 }
+
+export namespace ShowAllOpenedFilesConfig {
+    export interface Config {
+        itemWidth:number;
+    }
+}

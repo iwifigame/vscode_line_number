@@ -6,15 +6,35 @@ import * as path from 'path';
 import { AllOpenedFiles } from './global';
 import { updateLRUFiles, deleteLRUFiles } from './fileUtils';
 import { showErrorMessage } from './handleError';
+import { ShowAllOpenedFilesConfig } from './configuration';
 
 const oldAllOpenedFilesPath = path.join(os.homedir(), "allOpenedFiles.txt");
 const allOpenedFilesPath = path.join(os.homedir(), ".allOpenedFiles.txt");
 
+let config: ShowAllOpenedFilesConfig.Config = { itemWidth: 80 };
+
 export function onActivate() {
-    watchFileOpen()
+    setupConfg();
+    vscode.workspace.onDidChangeConfiguration(event => {
+        let affected = event.affectsConfiguration("ShowAllOpenedFiles.itemWidth");
+        if (affected) {
+            setupConfg();
+        }
+    })
+
+    watchFileOpen();
     readAllOpenedFiles();
 
     watchAllOpenedFilesChange();
+
+}
+
+function setupConfg() {
+    let w = vscode.workspace.getConfiguration("ShowAllOpenedFiles").get<number>("itemWidth");
+    if (w == undefined) {
+        w = 80
+    }
+    config.itemWidth = w
 }
 
 export function execShowAllOpenedFiles() {
@@ -54,7 +74,7 @@ function readAllOpenedFiles() {
     updateAllOpenedFilesFromFile(allOpenedFilesPath)
 }
 
-function updateAllOpenedFilesFromFile(filePath:string) {
+function updateAllOpenedFilesFromFile(filePath: string) {
     vscode.workspace.openTextDocument(filePath)
         .then((doc: vscode.TextDocument) => {
             let content = doc.getText();
@@ -122,20 +142,20 @@ interface FileQuickPickItem extends vscode.QuickPickItem {
 }
 
 function buildFileQuickPickItems(files: Array<string>): FileQuickPickItem[] {
-    const items = files.map((v, i) => {
-        // todo config
-        const lllsize = 100;
-        let lv = v.length;
-        let tmpS = v;
-        if (lv > lllsize) {
-            tmpS = '...' + v.slice(-lllsize);
+    const items = files.map((path, i) => {
+        let showPath = path;
+
+        const itemWidth = config.itemWidth;
+        if (path.length > itemWidth) {
+            showPath = '...' + path.slice(-itemWidth);
         }
-        let a = {
-            fileName: v,
-            label: i.toString() + "---" + tmpS,
+
+        let item = {
+            fileName: path,
+            label: i.toString() + "---" + showPath,
             // description: "--- " + i.toString(),
         } as FileQuickPickItem;
-        return a
+        return item
     });
 
     return items;
