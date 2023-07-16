@@ -3,7 +3,7 @@
   "displayName": "All Opened Files",
   "description": "Manage all Opened Files, and quick access it.",
   "license": "MIT",
-  "version": "3.0.3",
+  "version": "3.0.8",
   "keywords": [
     "files",
     "open",
@@ -36,14 +36,17 @@
     "commands": [
       {
         "command": "extension.showAllOpenedFiles",
-        "title": "showAllOpenedFiles"
+        "category": "AllOpenedFiles",
+        "title": "Show All Opened Files"
       },
       {
         "command": "extension.quickOpen",
-        "title": "quickOpen"
+        "category": "AllOpenedFiles",
+        "title": "Quick Open"
       },
       {
         "command": "extension.insertLineNumber",
+        "category": "AllOpenedFiles",
         "title": "Insert Line Number"
       }
     ],
