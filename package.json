@@ -1,44 +1,54 @@
 {
-  "name": "insert-line-number",
-  "displayName": "Insert Line Number",
-  "description": "Insert line numbers to selected lines or the whole document.",
+  "name": "all-opened-files",
+  "displayName": "All Opened Files",
+  "description": "Manage all Opened Files, and quick access it.",
   "license": "MIT",
-  "version": "1.0.1",
-  "icon": "vscode-insert-line-number.png",
+  "version": "3.0.3",
   "keywords": [
-    "line number"
+    "files",
+    "open",
+    "history"
   ],
   "author": {
-    "name": "anders-liu"
+    "name": "liyongjin"
   },
-  "homepage": "https://github.com/anders-liu/vscode-insert-line-number",
+  "homepage": "https://github.com/iwifigame/vscode_line_number",
   "repository": {
     "type": "git",
-    "url": "https://github.com/anders-liu/vscode-insert-line-number"
+    "url": "https://github.com/iwifigame/vscode_line_number"
   },
   "bugs": {
-    "url": "https://github.com/anders-liu/vscode-insert-line-number/issues"
+    "url": "https://github.com/iwifigame/vscode_line_number/issues"
   },
-  "publisher": "andersliu",
+  "publisher": "liyongjin",
   "engines": {
     "vscode": "^1.30.0"
   },
   "categories": [
     "Formatters"
   ],
+  "icon": "images/icon2.png",
   "activationEvents": [
-    "onCommand:extension.insertLineNumber"
+    "onStartupFinished"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
+      {
+        "command": "extension.showAllOpenedFiles",
+        "title": "showAllOpenedFiles"
+      },
+      {
+        "command": "extension.quickOpen",
+        "title": "quickOpen"
+      },
       {
         "command": "extension.insertLineNumber",
         "title": "Insert Line Number"
       }
     ],
     "configuration": {
-      "title": "Insert Line Number",
+      "title": "All Opened Files",
       "properties": {
         "InsertLineNumber.formats": {
           "type": "array",
@@ -60,10 +70,17 @@
               "suffix": "]    "
             }
           ],
-          "description": "Line number fromats."
+          "description": "all opened files"
         }
       }
-    }
+    },
+    "keybindings": [
+      {
+        "command": "extension.showAllOpenedFiles",
+        "key": "alt+shift+o",
+        "mac": "alt+shift+o"
+      }
+    ]
   },
   "scripts": {
     "vscode:prepublish": "npm run compile",

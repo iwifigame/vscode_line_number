@@ -1,14 +1,24 @@
 import * as vscode from 'vscode';
-import { onActivate, execInsertLineNumber } from "./LineNumberInserter";
+import * as LineNumberInserter from "./lineNumber";
+import * as AllOpenedFiles from "./allOpendFile";
 
 export function activate(context: vscode.ExtensionContext) {
-	console.log('"insert-line-number" is now active.');
+	console.log('is now active.' + context.extensionPath);
 
-	onActivate(/* context */);
+	AllOpenedFiles.onActivate()
+
+	LineNumberInserter.onActivate();
 
 	context.subscriptions.push(vscode.commands.registerCommand('extension.insertLineNumber', () => {
-		execInsertLineNumber(/* context */);
+		LineNumberInserter.execInsertLineNumber();
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.showAllOpenedFiles', () => {
+		AllOpenedFiles.execShowAllOpenedFiles();
+	}));
+	context.subscriptions.push(vscode.commands.registerCommand('extension.quickOpen', (path) => {
+		AllOpenedFiles.execQuickOpen(path);
 	}));
 }
 
-export function deactivate() { }
+export function deactivate() {
+}

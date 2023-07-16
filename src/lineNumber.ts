@@ -1,6 +1,5 @@
 import * as vscode from 'vscode';
 import { InsertLineNumberConfig } from './configuration';
-import { isNumber } from 'util';
 
 interface FormatQuickPickItem extends vscode.QuickPickItem {
     formatConfig: InsertLineNumberConfig.Format;
@@ -11,27 +10,30 @@ interface LineRange {
     end: number;
 }
 
-export function onActivate(/* context: vscode.ExtensionContext */) {
+export function onActivate() {
     setupDefaultFormatConfigs();
 }
 
-export function execInsertLineNumber(/* context: vscode.ExtensionContext */) {
+export function execInsertLineNumber() {
     if (!vscode.window.activeTextEditor) {
         vscode.window.showWarningMessage("No activated editor.");
         return;
     }
 
     let quickPickItems = buildFormatQuickPickItems();
-    let item = quickPickItems[0];
-    insertLineNumber(item.formatConfig, vscode.window.activeTextEditor!.selection);
-    // vscode.window.showQuickPick(quickPickItems, {
-    //     canPickMany: false,
-    //     placeHolder: "Select a format (Define your own formats under 'InsertLineNumber.formats' in config file.)"
-    // }).then(item => {
-    //     if (item) {
-    //         insertLineNumber(item.formatConfig, vscode.window.activeTextEditor!.selection);
-    //     }
-    // });
+    if (quickPickItems.length == 1) {
+        let item = quickPickItems[0];
+        insertLineNumber(item.formatConfig, vscode.window.activeTextEditor!.selection);
+    } else {
+        vscode.window.showQuickPick(quickPickItems, {
+            canPickMany: false,
+            placeHolder: "Select a format (Define your own formats under 'InsertLineNumber.formats' in config file.)"
+        }).then(item => {
+            if (item) {
+                insertLineNumber(item.formatConfig, vscode.window.activeTextEditor!.selection);
+            }
+        });
+    }
 }
 
 function buildFormatQuickPickItems(): FormatQuickPickItem[] {
@@ -90,7 +92,7 @@ function formatNumber(
             end.toString().length,
             formatConfig.padding === "zero" ? "0" : " ",
             formatConfig.align === "right");
-    } else if (isNumber(formatConfig.width)) {
+    } else if (typeof formatConfig.width === 'number') {
         str = padString(
             str,
             formatConfig.width,
